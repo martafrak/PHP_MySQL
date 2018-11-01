@@ -1,0 +1,40 @@
+/*Example_database 
+#books
+
+qustions:
+Find in database
+0. All books
+1. book no 7
+2. all thriller books
+3. books from 2018
+4. fantasy book from 2018
+5. only all author and books title from 2018
+6. alphabetically author
+7. books where id is 10-12
+8. Books where first letter is “T”
+9. Books included phrase "ed"
+10. Mystery and Thriller books from 2018
+*/
+
+
+SELECT * FROM books
+
+SELECT * FROM books WHERE ID="7"
+
+SELECT * FROM books WHERE category="thriller"
+
+SELECT * FROM books WHERE year_pub=2018
+
+SELECT * FROM books WHERE year_pub=2018 AND category="fantasy"
+
+SELECT author, title FROM books WHERE year_pub=2018
+
+SELECT * FROM books ORDER BY author ASC
+
+SELECT * FROM books WHERE ID>=10 AND ID<=12
+
+SELECT * FROM books WHERE title LIKE "T%"
+
+SELECT * FROM books WHERE title LIKE "%ed%"
+
+SELECT * FROM books WHERE (category="mystery" OR category="thriller") AND year_pub=2018
