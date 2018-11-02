@@ -1,0 +1,29 @@
+AGENDA
+
+REGISTRATION
+1. login:
+2. e-mail:
+3. password:
+   password:
+4. captcha
+5. checkbox (regulations)
+6. button register
+
+Features
+1. check: user filled forms and clicked submit
+2. is login correct? 
+a) length (beetween 3 and 15)
+b) include only letters and numbers
+3. check email (is it correct?included @ etc?)
+4. check password
+a) length (beetween 9 and 25)
+b) the same password in 2 places
+c) hash
+5. checkbox is required
+6. captcha -> must be check
+7. What if email/login exist in database? 
+
+---
+inspired by https://www.youtube.com/watch?v=fMJw90n8M60&list=PLOYHgt8dIdox81dbm1JWXQbm2geG1V2uh&index=4
+
+
