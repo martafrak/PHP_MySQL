@@ -19,3 +19,41 @@ SELECT books.title, books.author FROM books, orders WHERE orders.idusers = 3 AND
 
 --find all orders when: users login is "marta" 
 SELECT users.id, users.address, books.title, orders.id WHERE users.login = "marta" AND users.idusers = orders.idusers AND orders.idbook = books.id
+
+
+
+--HOW TO UPDATE
+
+--change address for user no 3
+UPDATE users SET address="Barcelona" WHERE id="3"
+
+--change books price +10% 
+UPDATE books SET price=ROUND(price*1.1,2)
+
+--change price the most expensive book +20 EURO
+UPDATE books SET price=ROUND(price+20,2) ORDER BY price DESC LIMIT 1
+
+--change address and login for user no 4
+UPDATE users SET address="Paris", login="Marco" WHERE id = 4
+
+--change price (-10%) for orders no 1-7
+UPDATE orders SET price=ROUND(price*0.9,2) WHERE id BETWEEN 1 AND 7
+
+
+--INSERT
+
+--how to add new user (NULL for primary key -> 'cause AI) (id,login,password,address... depends on table)
+INSERT INTO users VALUES(NULL,"Carol","qwerty","Poznan")
+
+-- add new order (and change order in table)
+INSERT INTO orders (idorders,idusers,idbooks,status) VALUES(NULL,3,5,"in progress")
+
+--add new book without all data (for example only title and price)
+INSERT INTO books (id, title, price) VALUE(NULL,"Run",34.99)
+
+--add 2 users in 1 query (id,login,password,address... depends on table)
+INSERT INTO users VALUE(NULL,"Anna","12345","London"),(NULL,"Caroline","asdf","Paris")
+
+--using set instead value
+INSERT INTO users SET id=NULL,login="BarcaFan",password="qwerty123",address="New York"
+
