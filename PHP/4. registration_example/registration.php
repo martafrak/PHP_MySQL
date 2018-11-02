@@ -54,6 +54,21 @@ if(isset($_POST['email']))
     //password -> password_hash
     $password_hash = password_hash($password1,PASSWORD_DEFAULT);
     
+    //check CITY
+    $city = $_POST['city'];
+    //TEST 1: check city's length
+    if((strlen($city)<2) || (strlen($city)>20))
+    {
+        $success=false;
+        $_SESSION['e_city']='Login must have 2-20 chars';
+    }
+    //TEST 2: check city is alphanumeric (not include special chars etc.)
+    if(ctype_alnum($city)==false)
+    {
+        $success=false;
+        $_SESSION['e_city']='City must have only letters';
+    }
+    
     //CAPTCHA -> Bot or not? ;) 
     $secret_key = "6LcvXngUAAAAABVxjH-M4502OVXGbQ1ehZlW_8GC";
     //check captcha key from google 
@@ -64,6 +79,40 @@ if(isset($_POST['email']))
     {
         $success=false;
         $_SESSION['e_captcha']='Are you bot?';
+    }
+    
+    //check discount code
+    $discount = $_POST['discount'];
+    if(isset($_POST['discount']))
+    {
+        //TEST 1: check code's length
+        if((strlen($discount)<3) || (strlen($discount)>15))
+        {
+            $success=false;
+            $_SESSION['e_discount']='Incorrect code';
+        }
+        //TEST 2: check login is alphanumeric (not include special chars etc.)
+        if(ctype_alnum($discount)==false)
+        {
+            $success=false;
+            $_SESSION['e_discount']='Incorrect code';
+        }
+        //TEST 3: check code's value
+        if($discount=='Summer2018')
+        {
+            $discount_def=10;
+        }
+        elseif($discount=='')
+        {
+            $discount_def=2;
+            $success=true;
+        }
+        
+    }
+    else
+    {
+        $discount_def=2;
+        $success=true;
     }
     
     //CHECKBOX
@@ -117,7 +166,7 @@ if(isset($_POST['email']))
             if($success==true)
             {
                 //now we can add new user!
-                if($connection->query("INSERT INTO users VALUES(NULL, '$login', '$password_hash', '$email', 1, 'Barcelona', 2, 30)"))
+                if($connection->query("INSERT INTO users VALUES(NULL, '$login', '$password_hash', '$email', 1, '$city', '$discount_def', 30)"))
                 {
                     header('Location: login.php');
                 }
@@ -164,7 +213,7 @@ if(isset($_POST['email']))
             unset($_SESSION['e_login']);
         }
        ?>
-       <br>
+       </br>
        E-mail: </br> <input type="text" name="email" /></br>
        <?php
         if(isset($_SESSION['e_email']))
@@ -173,7 +222,7 @@ if(isset($_POST['email']))
             unset($_SESSION['e_email']);
         }
        ?>
-       <br>
+       </br>
        Password: </br> <input type="password" name="password1" /></br>
        Password: </br> <input type="password" name="password2" /></br></br>
        <?php
@@ -183,7 +232,16 @@ if(isset($_POST['email']))
             unset($_SESSION['e_password']);
         }
        ?>
-       <br>
+       </br>
+       City:</br> <input type="text" name="city" /></br>
+        <?php
+        if(isset($_SESSION['e_city']))
+        {
+            echo $_SESSION['e_city'];
+            unset($_SESSION['e_city']);
+        }
+       ?>
+       </br>
        <div class="g-recaptcha" data-sitekey="6LcvXngUAAAAAFskclqG9NWKdkHU67YK5JP6M_7h"></div></br>
        <?php
         if(isset($_SESSION['e_captcha']))
@@ -192,7 +250,17 @@ if(isset($_POST['email']))
             unset($_SESSION['e_captcha']);
         }
        ?>
-       <br>
+       </br>
+        Have you got a discount code? </br> <input type="text" name="discount" /></br>
+        <?php
+        if(isset($_SESSION['e_discount']))
+        {
+            echo $_SESSION['e_discount'];
+            unset($_SESSION['e_discount']);
+        }
+       ?>
+       </br>
+       
        <label><input type="checkbox" name="checkbox" /> I agree to Terms</label></br></br>
        <?php
         if(isset($_SESSION['e_checkbox']))
@@ -201,7 +269,7 @@ if(isset($_POST['email']))
             unset($_SESSION['e_checkbox']);
         }
        ?>
-       <br>
+       </br>
        <input type="submit" value="Sign up"/>
        
    </form>
