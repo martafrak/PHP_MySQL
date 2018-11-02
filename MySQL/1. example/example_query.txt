@@ -1,0 +1,21 @@
+--example query
+
+--the oldest book
+SELECT * FROM books ORDER BY year_pub DESC LIMIT 1 
+
+--when I have more table, for example 3 table: books, users and orders and I need information from all tables
+
+--find all users login and address for every order (find ID and books title)
+
+SELECT users.login, users.address, orders.id, orders.title FROM users, orders WHERE users.idusers = orders.idusers
+--using alias (it is shorter)
+SELECT u.login, u.address, o.id, o.title FROM users AS u, orders AS o WHERE u.idusers = o.idusers
+
+--all users ordered book no 3 (ID=3)
+SELECT users.login FROM users, orders WHERE orders.id = 3 AND users.idusers = orders.idusers
+
+--display users no 3: books orders
+SELECT books.title, books.author FROM books, orders WHERE orders.idusers = 3 AND users.idusers = orders.idusers
+
+--find all orders when: users login is "marta" 
+SELECT users.id, users.address, books.title, orders.id WHERE users.login = "marta" AND users.idusers = orders.idusers AND orders.idbook = books.id
