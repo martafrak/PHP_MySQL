@@ -33,6 +33,8 @@ if ((isset($_SESSION['active'])) && ($_SESSION['active']==true))
         <input type="submit" value="Log in" />
 
     </form>
+    </br>
+    <a href="registration.php">Sign Up - It’s free and always will be!</a>
 
 <?php 
 #display it only if user tried to log in

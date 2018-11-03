@@ -10,16 +10,17 @@ if((!isset($_POST['login'])) || (!isset($_POST['password'])))
     }
     
 require_once "connect.php"; #added file where I included all data to connection
-
-    #open connection -> constructor
-    $connection = @new mysqli($host, $db_user, $db_password, $db_name);
-    
-    #check connection
-    if($connection->connect_errno!=0) 
-        {
-            echo "Error".$connection->connect_errno;
-        }
-    else
+mysqli_report(MYSQLI_REPORT_STRICT);
+    try
+    {
+        #open connection -> constructor
+        $connection = @new mysqli($host, $db_user, $db_password, $db_name);
+        #check connection
+        if($connection->connect_errno!=0) 
+            {
+                throw new Exception(mysqli_connect_errno());
+            }
+        else
         {
             #receive login and password from index.php
             $login = $_POST['login'];
@@ -55,13 +56,13 @@ require_once "connect.php"; #added file where I included all data to connection
                                     }
                                 else #wrong password 
                                     {
-                                        $_SESSION['error'] ='Incorrect password';
+                                        $_SESSION['error'] ='</br>Incorrect password';
                                         header('Location: index.php');
                                     }
                             }
                         else #wrong login (because I don't have result)
                             {
-                                $_SESSION['error'] ='Incorrect login';
+                                $_SESSION['error'] ='</br>Incorrect login';
                                 header('Location: index.php');
                             }
                 }
@@ -69,4 +70,10 @@ require_once "connect.php"; #added file where I included all data to connection
             $connection->close(); 
     
         }
+    }
+    catch(Exception $error)
+    {
+        echo "Error";
+    }
+    
 ?>
