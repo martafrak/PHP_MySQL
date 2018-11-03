@@ -14,7 +14,7 @@ mysqli_report(MYSQLI_REPORT_STRICT);
     try
     {
         #open connection -> constructor
-        $connection = @new mysqli($host, $db_user, $db_password, $db_name);
+        $connection = new mysqli($host, $db_user, $db_password, $db_name);
         #check connection
         if($connection->connect_errno!=0) 
             {

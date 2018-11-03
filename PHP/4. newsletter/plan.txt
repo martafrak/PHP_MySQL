@@ -1,0 +1,16 @@
+AGENDA
+
+Newsletter (using PDO)
+
+1. connection (database)
+a) database "newsletter": admin(id, login, password) and users(id, email)
+b) config: array for connection's data
+2. validate an email
+a) TEST 1: check adding email address
+b) TEST 2: validate email
+c) TEST 3: email exist
+3. Query (method):
+a) prepare
+b) bind [method bindValue(where, $what, type)]
+c) execute
+4. add new record
