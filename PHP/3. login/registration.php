@@ -166,7 +166,7 @@ if(isset($_POST['email']))
             if($success==true)
             {
                 //now we can add new user!
-                if($connection->query("INSERT INTO users VALUES(NULL, '$login', '$password_hash', '$email', 1, '$city', '$discount_def', 30)"))
+                if($connection->query("INSERT INTO users VALUES(NULL, '$login', '$password_hash', '$email', 1, '$city', '$discount_def', now() + INTERVAL 14 DAY)"))
                 {
                     header('Location: login.php');
                 }

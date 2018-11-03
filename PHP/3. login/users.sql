@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 01 Lis 2018, 19:53
+-- Czas generowania: 03 Lis 2018, 13:28
 -- Wersja serwera: 10.1.29-MariaDB
 -- Wersja PHP: 7.2.0
 
@@ -36,7 +36,7 @@ CREATE TABLE `users` (
   `level` int(11) NOT NULL,
   `city` text COLLATE utf8_polish_ci NOT NULL,
   `discount` int(11) NOT NULL,
-  `premium` int(11) NOT NULL
+  `premium` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 --
@@ -44,11 +44,12 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`ID`, `login`, `password`, `email`, `level`, `city`, `discount`, `premium`) VALUES
-(1, 'LadyInRed', 'example1', 'ladyinred@email.com', 4, 'London', 5, 10),
-(2, 'Caroline22', 'example2', 'carroline22@email.com', 1, 'Warsaw', 2, 12),
-(3, 'Tom1994', 'Example3', 'Tom1994@email.com', 1, 'Lyon', 2, 34),
-(4, 'marta', 'Example4', 'marta@email.com', 6, 'Poznan', 25, 4),
-(5, 'Oliver', 'Example5', 'Oliver333@email.com', 6, 'Barcelona', 27, 20);
+(1, 'LadyInRed', 'example1', 'ladyinred@email.com', 4, 'London', 5, '0000-00-00 00:00:00'),
+(2, 'Caroline22', 'example2', 'carroline22@email.com', 1, 'Warsaw', 2, '0000-00-00 00:00:00'),
+(3, 'Tom1994', 'Example3', 'Tom1994@email.com', 1, 'Lyon', 2, '0000-00-00 00:00:00'),
+(4, 'marta', 'Example4', 'marta@email.com', 6, 'Poznan', 25, '0000-00-00 00:00:00'),
+(5, 'Oliver', 'Example5', 'Oliver333@email.com', 6, 'Barcelona', 27, '0000-00-00 00:00:00'),
+(12, 'test', '$2y$10$ipVLuOTjeHZ.sxGBQtTXHeCuLspmnLN8J6L3Eb8W/GVuhtAn8LbCm', 'testowy123@test.pl', 1, 'Wroclaw', 10, '2018-11-17 13:28:25');
 
 --
 -- Indeksy dla zrzutów tabel
@@ -68,7 +69,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT dla tabeli `users`
 --
 ALTER TABLE `users`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
