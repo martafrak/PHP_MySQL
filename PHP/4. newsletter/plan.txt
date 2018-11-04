@@ -3,7 +3,7 @@ AGENDA
 Newsletter (using PDO)
 
 1. connection (database)
-a) database "newsletter": admin(id, login, password) and users(id, email)
+a) database "newsletter": users(id, email)
 b) config: array for connection's data
 2. validate an email
 a) TEST 1: check adding email address

@@ -26,7 +26,7 @@ if(isset($_POST['email']))
                 if($no_email>0) //the email exists in database
                 {
                     $_SESSION['error_email']='e-mail exists';
-                    header('Location index.php');
+                    header('Location: index.php');
                 }
                 else //the email doesn't exist, so I add it
                 {
@@ -42,8 +42,8 @@ if(isset($_POST['email']))
     }
     else //incorrect email
     {
-        $_SESSION['e_mail'] = $email; //'cause I want display information for user (error)
-        header('Location index.php');
+        $_SESSION['e_email'] = $email; //'cause I want display information for user (error)
+        header('Location: index.php');
         exit();
     }
     
