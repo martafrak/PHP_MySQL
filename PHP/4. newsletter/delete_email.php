@@ -3,21 +3,21 @@
 session_start();
 
 //TEST 1: check adding email address
-if(isset($_POST['email']))
+if(isset($_POST['delete_email']))
 {
     //TEST 2: validate email -> filter_input(entry, variable, filter)
-    $checkemail = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-    $email = $_POST['email'];
+    $checkemail = filter_input(INPUT_POST, 'delete_email', FILTER_VALIDATE_EMAIL);
+    $delete_email = $_POST['delete_email'];
     
-    if($checkemail==$email)
+    if($checkemail==$delete_email)
     {
         //TEST 3: does the email exist?
             try
             {
                 //add connection
                 require_once 'database.php';
-                $result = $connection->prepare("SELECT email FROM users WHERE email= :email");
-                $result->bindValue(':email',$email, PDO::PARAM_STR);
+                $result = $connection->prepare("DELETE FROM users WHERE email= :email");
+                $result->bindValue(':email',$delete_email, PDO::PARAM_STR);
                 $result->execute();
                 if(!$result) throw new Exception($connection->error);
 
@@ -25,14 +25,15 @@ if(isset($_POST['email']))
                 $no_email = $result->rowCount();
                 if($no_email>0) //the email exists in database
                 {
-                    $_SESSION['error_email']='e-mail exists';
-                    header('Location: index.php');
+                    $query = $connection->prepare('DELETE FROM users WHERE email=":email"');
+                    $query->bindValue(':email',$delete_email, PDO::PARAM_STR); //bindValue(where, $what, type)
+                    $query->execute();  
                 }
-                else //the email doesn't exist, so I add it
+                else //the email doesn't exist
                 {
-                    $query = $connection->prepare('INSERT INTO users VALUES(NULL, :email)');
-                    $query->bindValue(':email',$email, PDO::PARAM_STR); //bindValue(where, $what, type)
-                    $query->execute();   
+                    $_SESSION['error_email']="e-mail doesn't exist";
+                    header('Location: delete.php');
+     
                 }
             }
             catch(Exception $error)
@@ -42,16 +43,16 @@ if(isset($_POST['email']))
     }
     else //incorrect email
     {
-        $_SESSION['e_email'] = $email; //'cause I want display information for user (error)
-        header('Location: index.php');
+        $_SESSION['e_email'] = $delete_email; //'cause I want display information for user (error)
+        header('Location: delete.php');
         exit();
     }
     
     
 }
-else //user didn't add email address
+else
 {
-    header('Location: index.php');
+    header('Location: delete.php');
     exit();
 }
 
@@ -69,9 +70,8 @@ else //user didn't add email address
 </head>
 
 <body>
-    <h1>Newsletter!</h1>
-    <h2>Thank you!</h2>
-    <h3><a href="delete.php">Sign off</a></h3>
+    <h1>DONE</h1>
+    <h3><a href="index.php">Do you want to join again?</a></h3>
 
 </body>
 
