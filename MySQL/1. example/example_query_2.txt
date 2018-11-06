@@ -1,0 +1,39 @@
+#EXAMPLE QUERIES
+
+create database books;
+
+show databases;
+
+use books;
+
+show tables;
+
+create table users(id int auto_increment, name varchar(20), surname varchar(20), address varchar(50), orders int, primary key(id));
+
+#(variables: 
+#int
+#varchar(x) - 0-255
+#datatime
+#date
+#text)
+
+desc users;
+
+INSERT INTO users VALUES(NULL, 'Marta', 'Frak', 'Wroclaw', 340);
+INSERT INTO users VALUES(NULL, 'Carol', 'Faster', 'Poznan', 220);
+
+SELECT * FROM users;
+SELECT name, surname FROM users;
+SELECT * FROM users WHERE name='Marta" AND surname="Frak";
+UPDATE users SET address='London' WHERE id=2;
+SELECT * FROM users WHERE orders>250;
+SELECT SUM(orders) as sum_price FROM users;
+SELECT avg(orders) FROM users;
+SELECT COUNT(1) FROM users;
+DELETE FROM users WHERE id=2;
+CREATE TABLE city(idcity int, name varchar(20), primary_key(idcity));
+INSERT INTO city VALUES(NULL, 'Wroclaw');
+INSERT INTO city VALUES(NULL, "London');
+SELECT name, surname, name FROM users, city WHERE city=address;
+
+
