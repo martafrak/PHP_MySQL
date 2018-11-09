@@ -8,7 +8,7 @@ use books;
 
 show tables;
 
-create table users(id int auto_increment, name varchar(20), surname varchar(20), address varchar(50), orders int, primary key(id));
+
 
 #(variables: 
 #int
@@ -25,6 +25,8 @@ INSERT INTO users VALUES(NULL, 'Carol', 'Faster', 'Poznan', 220);
 SELECT * FROM users;
 SELECT name, surname FROM users;
 SELECT * FROM users WHERE name='Marta" AND surname="Frak";
+SELECT * FROM users WHERE id=1 or id=2 or id=23;
+SELECT * FROM users WHERE id IN (1,2,23);
 UPDATE users SET address='London' WHERE id=2;
 SELECT * FROM users WHERE orders>250;
 SELECT SUM(orders) as sum_price FROM users;
@@ -36,4 +38,44 @@ INSERT INTO city VALUES(NULL, 'Wroclaw');
 INSERT INTO city VALUES(NULL, "London');
 SELECT name, surname, name FROM users, city WHERE city=address;
 
+SOURCE C:\path....
+
+SELECT name, avg(orders) as avg_orders from users, city GROUP BY name;
+
+---
+//when we have more queries:
+1. example
+SELECT avg(orders) FROM users;
+SELECT * FROM users WHERE orders>=(SELECT avg(orders) FROM users);
+
+2. example (all/any)
+SELECT orders FROM users where id=3;
+SELECT * FROM users WHERE id>all(SELECT orders FROM users where id=3);
+
+//other queries and optimization:
+SHOW table status;
+SHOW table status\G;
+SELECT COUNT(1) users WHERE orders>100 AND orders<40;
+SELECT SQL_NO_CACHE COUNT(1) users WHERE orders>100 AND orders<40;
+SHOW CREATE TABLE users;
+
+//how to use index -> (when you use it, mysql works faster)
+CREATE INDEX use_orders ON users(orders);
+
+//if you need more information about query
+EXPLAIN SELECT SQL_NO_CACHE COUNT(1) users WHERE orders>100 AND orders<40;
+EXPLAIN SELECT SQL_NO_CACHE COUNT(1) users WHERE orders>100 AND orders<40\G;
+
+//delete index from table (possible_keys: NULL)
+DROP index use_orders ON users;
+
+//more conditions: (create index - order is important: for example orders,city etc.)
+SELECT SQL_NO_CACHE COUNT(1) users WHERE orders>100 AND orders<40 AND city="London";
+CREATE INDEX use_order_city ON users(orders,city);
+
+//search a part of word
+SELECT id FROM users WHERE city like '%on%';
+//optimization: better and faster:
+CREATE FULLTEXT INDEX part_word ON users(city);
+SELECT SQL_NO_CACHE id FROM users WHERE MATCH(city) AGAINST('on');
 
