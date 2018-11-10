@@ -60,7 +60,7 @@ if(isset($_POST['email']))
     if((strlen($city)<2) || (strlen($city)>20))
     {
         $success=false;
-        $_SESSION['e_city']='Login must have 2-20 chars';
+        $_SESSION['e_city']='City must have 2-20 chars';
     }
     //TEST 2: check city is alphanumeric (not include special chars etc.)
     if(ctype_alnum($city)==false)
@@ -98,22 +98,44 @@ if(isset($_POST['email']))
             $_SESSION['e_discount']='Incorrect code';
         }
         //TEST 3: check code's value
-        if($discount=='Summer2018')
-        {
-            $discount_def=10;
-        }
-        elseif($discount=='')
-        {
-            $discount_def=2;
-            $success=true;
-        }
-        
-    }
-    else
-    {
-        $discount_def=2;
-        $success=true;
-    }
+        //connect database 
+         try
+            {
+                //add connection
+                require_once 'connect_discount.php';
+                $result_discount = $connection_discount->prepare("SELECT value FROM code WHERE name= :name");
+                $result_discount->bindValue(':name',$discount, PDO::PARAM_STR);
+                $result_discount->execute();
+                if(!$result_discount) throw new Exception($connection_discount->error);
+
+                
+                $no_discount = $result_discount->rowCount();
+                if($no_discount>0) //the code exists in database
+                {
+                    $value_discount = $connection_discount->prepare("SELECT value FROM code WHERE name= :name");
+                    $value_discount->bindValue(':name',$discount, PDO::PARAM_STR); //bindValue(where, $what, type)
+                    $value_discount->execute(); 
+                    $discount_def = $value_discount->fetchColumn();
+                    $success=true;
+                }
+                else //the code doesn't exist
+                {
+                    $discount_def=2;
+                    $success=true;
+     
+                }
+            }
+            catch(Exception $error)
+            {
+                echo 'DATABASE ERROR';
+            }
+
+     }
+    else //the code doesn't exist
+             {
+                  $discount_def=2;
+                  $success=true;
+             }
     
     //CHECKBOX
     //TEST 1: when checkbox is check -> isset() = true
@@ -124,7 +146,7 @@ if(isset($_POST['email']))
     }
     
     
-    //connect database
+    //connect database - registration
     require_once "connect.php";
     mysqli_report(MYSQLI_REPORT_STRICT); //set 'mysqli_report' when I want to throw new Expeception 
     try
@@ -182,7 +204,6 @@ if(isset($_POST['email']))
     catch(Exception $error)
     {
         echo 'ERROR';
-        echo $error;
     }
 }
 

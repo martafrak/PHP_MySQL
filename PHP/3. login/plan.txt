@@ -25,6 +25,7 @@ c) hash
 
 OTHERS:
 1. Premium days: change int-> date/time
+2. Discount: add database, check codes in database
 
 ---
 inspired by https://www.youtube.com/watch?v=fMJw90n8M60&list=PLOYHgt8dIdox81dbm1JWXQbm2geG1V2uh&index=4
