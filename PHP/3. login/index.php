@@ -1,25 +1,12 @@
+<?php include 'includes/header.php'; ?>
 <?php
-session_start();
-
 if ((isset($_SESSION['active'])) && ($_SESSION['active']==true))
     {
         header('Location: page.php');
         exit(); #because I don't want to do all code below
     }
 ?>
-
-
-<!DOCTYPE html>
-<html lang="pl">
-
-<head>
-    <meta charset="UTF-8">
-    <title>PHP exercise 3 - login</title>
-    <meta name="description" content="php - example 3" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-</head>
-
-<body>
+   
     <h2>Do you want to log in?</h2>
     <h3>OKAY!</h3>
 
@@ -41,7 +28,4 @@ if ((isset($_SESSION['active'])) && ($_SESSION['active']==true))
     if(isset($_SESSION['error'])) echo $_SESSION['error'];
 ?>
 
-
-</body>
-
-</html>
+<?php include 'includes/footer.php'; ?>

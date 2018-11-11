@@ -1,6 +1,6 @@
-<?php
-session_start();
+<?php include 'includes/header.php'; ?>
 
+<?php
 #check isset login and password, if not -> index.php
 if(!isset($_SESSION['active']))
 {
@@ -8,18 +8,6 @@ if(!isset($_SESSION['active']))
     exit();
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="pl">
-
-<head>
-    <meta charset="UTF-8">
-    <title>PHP exercise 3 - login</title>
-    <meta name="description" content="php - example 3" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-</head>
-
-<body>
 
 <?php
     
@@ -51,14 +39,7 @@ if(!isset($_SESSION['active']))
             echo "You don't have premium days!";
         }
     
-    echo "You are on ".$_SESSION['level']." level! Your discount: ".$_SESSION['discount']."%";
-    
-
-    
+    echo "You are on ".$_SESSION['level']." level! Your discount: ".$_SESSION['discount']."%";  
     
 ?>
-
-
-</body>
-
-</html>
+<?php include 'includes/footer.php'; ?>

@@ -6,9 +6,3 @@ return [
     'db_password' => '',
     'db_name' => 'discount'
         ];
-    
-    
-    //$host = "localhost";
-    //$db_user = "root";
-    //$db_password = "";
-    //$db_name = "newsletter";

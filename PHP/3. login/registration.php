@@ -1,7 +1,3 @@
-
-<!--inspired by https://www.youtube.com/watch?v=fMJw90n8M60&list=PLOYHgt8dIdox81dbm1JWXQbm2geG1V2uh&index=4-->
-
-
 <?php
 session_start();
 
