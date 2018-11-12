@@ -98,7 +98,7 @@ if(isset($_POST['email']))
          try
             {
                 //add connection
-                require_once 'connect_discount.php';
+                require_once 'common.php';
                 $result_discount = $connection_discount->prepare("SELECT value FROM code WHERE name= :name");
                 $result_discount->bindValue(':name',$discount, PDO::PARAM_STR);
                 $result_discount->execute();
@@ -143,23 +143,17 @@ if(isset($_POST['email']))
     
     
     //connect database - registration
-    require_once "connect.php";
-    mysqli_report(MYSQLI_REPORT_STRICT); //set 'mysqli_report' when I want to throw new Expeception 
     try
     {
-        $connection = new mysqli($host, $db_user, $db_password, $db_name);
-        if($connection->connect_errno!=0) 
-        {
-            //connection doesn't work
-            throw new Exception(mysqli_connect_errno());
-        }
-        else //connection works
-        {
+        require_once "common.php";
+            //connection works
             //does the email exist?
-            $result=$connection->query("SELECT email FROM users WHERE email='$email'");
+            $result = $connection->prepare("SELECT email FROM users WHERE email= :email LIMIT 1");
+            $result ->bindValue(':email',$email, PDO::PARAM_STR);
+            $result ->execute();
             if(!$result) throw new Exception($connection->error);
-            
-            $no_email = $result->num_rows;
+        
+            $no_email= $result->rowCount();
             //TEST
             if($no_email>0) //the email exists in database
             {
@@ -168,10 +162,12 @@ if(isset($_POST['email']))
             }
             
             //does the login exist?
-            $result=$connection->query("SELECT login FROM users WHERE login='$login'");
+            $result_login = $connection->prepare("SELECT login FROM users WHERE login= :login LIMIT 1");
+            $result_login ->bindValue(':login',$login, PDO::PARAM_STR);
+            $result_login ->execute();
             if(!$result) throw new Exception($connection->error);
-            
-            $no_login = $result->num_rows;
+        
+            $no_login= $result_login->rowCount();
             //TEST
             if($no_login>0) //the login exists in database
             {
@@ -184,18 +180,13 @@ if(isset($_POST['email']))
             if($success==true)
             {
                 //now we can add new user!
-                if($connection->query("INSERT INTO users VALUES(NULL, '$login', '$password_hash', '$email', 1, '$city', '$discount_def', now() + INTERVAL 14 DAY)"))
-                {
-                    header('Location: login.php');
-                }
-                else //if we can not add new user
-                {
-                    throw new Exception($connection->error);
-                }
+                $result = $connection->prepare("INSERT INTO users VALUES(NULL, '$login', '$password_hash', '$email', 1, '$city', '$discount_def', now() + INTERVAL 14 DAY)");
+                $result ->bindValue(':login',$login, PDO::PARAM_STR);
+                $result ->execute();
+                if(!$result) throw new Exception($connection->error);
+                header('Location: login.php');
+                
             }
-            
-            $connection->close();
-        }
     }
     catch(Exception $error)
     {

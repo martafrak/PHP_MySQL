@@ -10,11 +10,11 @@ if(!isset($_SESSION['active']))
 ?>
 
 <?php
-    
-    echo "<h1>Hello ".$_SESSION['user'].", nice to see you! [<a href='logout.php'>Log out</a>]</h1>";
+
+    echo "<h1>Hello ".$_SESSION['userData']['login'].", nice to see you! [<a href='logout.php'>Log out</a>]</h1>";
     echo "<h2>Your profile</h2>";
-    echo "<p><strong>email: </strong></p>".$_SESSION['email'];
-    echo "<p><strong>City: </strong></p>".$_SESSION['city'];
+    echo "<p><strong>email: </strong></p>".$_SESSION['userData']['email'];
+    echo "<p><strong>City: </strong></p>".$_SESSION['userData']['city'];
     
     //echo "</br>".time()."</br>"; 
     //echo "Today is: ".date('Y-m-d H:i:s'); //the same format in database
@@ -25,8 +25,8 @@ if(!isset($_SESSION['active']))
     //format method (here add date format)
     echo "</br></br></br>Today is: ".$datetime->format('Y-m-d H:i:s');
     //Premium account:
-    echo "<p><strong>Your premium account: ".$_SESSION['premium']."</strong></p>";
-    $premiumend = DateTime::createFromFormat('Y-m-d H:i:s',$_SESSION['premium']);
+    echo "<p><strong>Your premium account: ".$_SESSION['userData']['premium']."</strong></p>";
+    $premiumend = DateTime::createFromFormat('Y-m-d H:i:s',$_SESSION['userData']['premium']);
     $premiumdays = $datetime->diff($premiumend);
     
     //check premium days
@@ -39,7 +39,7 @@ if(!isset($_SESSION['active']))
             echo "You don't have premium days!";
         }
     
-    echo "You are on ".$_SESSION['level']." level! Your discount: ".$_SESSION['discount']."%";  
+    echo "You are on ".$_SESSION['userData']['level']." level! Your discount: ".$_SESSION['userData']['discount']."%";  
     
 ?>
 <?php include 'includes/footer.php'; ?>
