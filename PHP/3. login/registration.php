@@ -1,5 +1,5 @@
+<?php include 'includes/header.php'; ?>
 <?php
-session_start();
 
 //check that user filled forms and clicked submit (if not - do nothing)
 if(isset($_POST['email']))
@@ -65,8 +65,9 @@ if(isset($_POST['email']))
         $_SESSION['e_city']='City must have only letters';
     }
     
-    //CAPTCHA -> Bot or not? ;) 
-    $secret_key = "6LcvXngUAAAAABVxjH-M4502OVXGbQ1ehZlW_8GC";
+    $config = require_once 'key.php';
+    //$secret_key = $config['secret_key'];
+    //$secret_key = "6LcvXngUAAAAABVxjH-M4502OVXGbQ1ehZlW_8GC";
     //check captcha key from google 
     $check_key = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret_key.'&response='.$_POST['g-recaptcha-response']);
     $response = json_decode($check_key);
@@ -195,21 +196,6 @@ if(isset($_POST['email']))
 }
 
 ?>
-
-
-<!DOCTYPE html>
-<html lang="pl">
-
-<head>
-    <meta charset="UTF-8">
-    <title>PHP exercise 3 - registration</title>
-    <meta name="description" content="php - example registration" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <!--captcha-->
-    <script src='https://www.google.com/recaptcha/api.js'></script>
-</head>
-
-<body>
    
    <form method="post">
        
@@ -281,7 +267,4 @@ if(isset($_POST['email']))
        <input type="submit" value="Sign up"/>
        
    </form>
-    
-</body>
-
-</html>
+   <?php include 'includes/footer.php'; ?>
