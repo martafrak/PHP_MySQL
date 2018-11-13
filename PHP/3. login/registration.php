@@ -66,10 +66,8 @@ if(isset($_POST['email']))
     }
     
     $config = require_once 'key.php';
-    //$secret_key = $config['secret_key'];
-    //$secret_key = "6LcvXngUAAAAABVxjH-M4502OVXGbQ1ehZlW_8GC";
     //check captcha key from google 
-    $check_key = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret_key.'&response='.$_POST['g-recaptcha-response']);
+    $check_key = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$config['secret_key'].'&response='.$_POST['g-recaptcha-response']);
     $response = json_decode($check_key);
     //TEST 1:
     if($response->success==false)
