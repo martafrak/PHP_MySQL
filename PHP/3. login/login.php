@@ -19,7 +19,7 @@ mysqli_report(MYSQLI_REPORT_STRICT);
                 $login = htmlentities($login, ENT_QUOTES, "UTF-8");
                 $password = $_POST['password'];
         
-                $result = $connection->prepare("SELECT login FROM users WHERE login= :login LIMIT 1");
+                $result = $connection->prepare("SELECT COUNT(ID) FROM users WHERE login= :login GROUP BY ID");
                 $result ->bindValue(':login',$login, PDO::PARAM_STR);
                 $result ->execute();
                 if(!$result) throw new Exception($connection->error);

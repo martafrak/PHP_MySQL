@@ -147,11 +147,12 @@ if(isset($_POST['email']))
         require_once "common.php";
             //connection works
             //does the email exist?
-            $result = $connection->prepare("SELECT email FROM users WHERE email= :email LIMIT 1");
+            $result = $connection->prepare("SELECT COUNT(ID) FROM users WHERE email= :email GROUP BY ID");
+            //$result = $connection->prepare("SELECT email FROM users WHERE email= :email LIMIT 1");
             $result ->bindValue(':email',$email, PDO::PARAM_STR);
             $result ->execute();
             if(!$result) throw new Exception($connection->error);
-        
+           
             $no_email= $result->rowCount();
             //TEST
             if($no_email>0) //the email exists in database
@@ -161,7 +162,7 @@ if(isset($_POST['email']))
             }
             
             //does the login exist?
-            $result_login = $connection->prepare("SELECT login FROM users WHERE login= :login LIMIT 1");
+            $result_login = $connection->prepare("SELECT COUNT(ID) FROM users WHERE login= :login GROUP BY ID");
             $result_login ->bindValue(':login',$login, PDO::PARAM_STR);
             $result_login ->execute();
             if(!$result) throw new Exception($connection->error);
