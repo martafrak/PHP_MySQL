@@ -19,14 +19,14 @@ mysqli_report(MYSQLI_REPORT_STRICT);
                 $login = htmlentities($login, ENT_QUOTES, "UTF-8");
                 $password = $_POST['password'];
         
-                $result = $connection->prepare("SELECT COUNT(ID) FROM users WHERE login= :login GROUP BY ID");
+                $result = $connection->prepare("SELECT COUNT(ID) AS total FROM users WHERE login= :login");
                 $result ->bindValue(':login',$login, PDO::PARAM_STR);
                 $result ->execute();
                 if(!$result) throw new Exception($connection->error);
         
-                $num_users = $result->rowCount();
+                $numUsers = $result ->fetch(PDO::FETCH_ASSOC);
 
-                        if($num_users>0)
+                        if($numUsers['total']>0)
                             {
                                 $result_password = $connection->prepare("SELECT password FROM users WHERE login= :login");
                                 $result_password ->bindValue(':login',$login, PDO::PARAM_STR);

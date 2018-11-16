@@ -24,6 +24,7 @@ if(isset($_POST['email']))
     
     //check EMAIL
     $email = $_POST['email'];
+    
     $email_checked = filter_var($email,FILTER_SANITIZE_EMAIL);
     //TEST 1: check email (if email include error -> set false)
     if((filter_var($email_checked,FILTER_VALIDATE_EMAIL)==false)|| ($email_checked!=$email))
@@ -31,6 +32,15 @@ if(isset($_POST['email']))
         $success=false;
         $_SESSION['e_email']='Incorrect email';
     }
+    
+    //TEST 2
+    $checkemail = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+    if($checkemail!=$email)
+      {
+          $success=false;
+          $_SESSION['e_email']='Incorrect email';
+      }
+    
     
     //check PASSWORD
     $password1 = $_POST['password1'];
@@ -147,29 +157,29 @@ if(isset($_POST['email']))
         require_once "common.php";
             //connection works
             //does the email exist?
-            $result = $connection->prepare("SELECT COUNT(ID) FROM users WHERE email= :email GROUP BY ID");
+            $result = $connection->prepare("SELECT COUNT(ID) AS total FROM users WHERE email= :email");
             //$result = $connection->prepare("SELECT email FROM users WHERE email= :email LIMIT 1");
             $result ->bindValue(':email',$email, PDO::PARAM_STR);
             $result ->execute();
             if(!$result) throw new Exception($connection->error);
-           
-            $no_email= $result->rowCount();
+            $noEmail = $result ->fetch(PDO::FETCH_ASSOC);
+
             //TEST
-            if($no_email>0) //the email exists in database
+            if($noEmail['total']>0) //the email exists in database
             {
                 $success=false;
                 $_SESSION['e_email']='e-mail exists';
             }
             
             //does the login exist?
-            $result_login = $connection->prepare("SELECT COUNT(ID) FROM users WHERE login= :login GROUP BY ID");
-            $result_login ->bindValue(':login',$login, PDO::PARAM_STR);
-            $result_login ->execute();
+            $result = $connection->prepare("SELECT COUNT(ID) as total FROM users WHERE login= :login");
+            $result ->bindValue(':login',$login, PDO::PARAM_STR);
+            $result ->execute();
             if(!$result) throw new Exception($connection->error);
         
-            $no_login= $result_login->rowCount();
+            $noLogin = $result ->fetch(PDO::FETCH_ASSOC);
             //TEST
-            if($no_login>0) //the login exists in database
+            if($noLogin['total']>0) //the login exists in database
             {
                 $success=false;
                 $_SESSION['e_login']='login exists';

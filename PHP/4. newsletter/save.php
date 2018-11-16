@@ -16,14 +16,13 @@ if(isset($_POST['email']))
             {
                 //add connection
                 require_once 'database.php';
-                $result = $connection->prepare("SELECT email FROM users WHERE email= :email");
+                $result = $connection->prepare("SELECT COUNT(ID) AS total FROM users WHERE email= :email");
                 $result->bindValue(':email',$email, PDO::PARAM_STR);
                 $result->execute();
                 if(!$result) throw new Exception($connection->error);
+                $noEmail = $result ->fetch(PDO::FETCH_ASSOC);
 
-                
-                $no_email = $result->rowCount();
-                if($no_email>0) //the email exists in database
+                if($noEmail['total']>0) //the email exists in database
                 {
                     $_SESSION['error_email']='e-mail exists';
                     header('Location: index.php');
