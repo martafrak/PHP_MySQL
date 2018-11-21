@@ -53,13 +53,15 @@ mysqli_report(MYSQLI_REPORT_STRICT);
                                     }
                                 else #wrong password 
                                     {
-                                        $_SESSION['error'] ='</br>Incorrect password';
+                                        $_SESSION['formErrors']['password'][] = 'Incorrect password';
+                                        //$_SESSION['error'] ='</br>Incorrect password';
                                         header('Location: index.php');
                                     }
                             }
                         else #wrong login (because I don't have result)
                             {
-                                $_SESSION['error'] ='</br>Incorrect login';
+                                $_SESSION['formErrors']['login'][] = 'Incorrect login';
+                                //$_SESSION['error'] ='</br>Incorrect login';
                                 header('Location: index.php');
                             }
      }

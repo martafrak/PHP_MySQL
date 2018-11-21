@@ -13,13 +13,15 @@ if(isset($_POST['email']))
     if((strlen($login)<3) || (strlen($login)>15))
     {
         $success=false;
-        $_SESSION['e_login']='Login must have 3-15 chars';
+        //$_SESSION['formErorrs'][] = 'Login must have 3-15 chars';
+        $_SESSION['formErrors']['login'][] = 'Login must have 3-15 chars'; 
     }
     //TEST 2: check login is alphanumeric (not include special chars etc.)
     if(ctype_alnum($login)==false)
     {
         $success=false;
-        $_SESSION['e_login']='Login must have only letters and numbers';
+        //$_SESSION['formErorrs'][] = 'Login must have only letters and numbers';
+        $_SESSION['formErrors']['login'][] = 'Login must have only letters and numbers';
     }
     
     //check EMAIL
@@ -30,7 +32,9 @@ if(isset($_POST['email']))
     if((filter_var($email_checked,FILTER_VALIDATE_EMAIL)==false)|| ($email_checked!=$email))
     {
         $success=false;
-        $_SESSION['e_email']='Incorrect email';
+        //$_SESSION['formErorrs']['email'] = 'Incorrect email';
+        $_SESSION['formErrors']['email'][] = 'Incorrect email';
+        
     }
     
     //TEST 2
@@ -38,7 +42,8 @@ if(isset($_POST['email']))
     if($checkemail!=$email)
       {
           $success=false;
-          $_SESSION['e_email']='Incorrect email';
+          //$_SESSION['formErorrs']['email'] = 'Incorrect email';
+        $_SESSION['formErrors']['email'][] = 'Incorrect email';
       }
     
     
@@ -49,13 +54,14 @@ if(isset($_POST['email']))
     if((strlen($password1)<9)||(strlen($password1)>25))
     {
         $success=false;
-        $_SESSION['e_password']='Password must have 9-25 chars';
+        //$_SESSION['formErorrs'][] = 'Password must have 9-25 chars';
+        $_SESSION['formErrors']['password'][] = 'Password must have 9-25 chars';
     }
     //TEST 2: is the same password in 2 places? 
     if($password1!=$password2)
     {
         $success=false;
-        $_SESSION['e_password']='Password must be the same';
+        $_SESSION['formErrors']['password'][] = 'Password must be the same';
     }
     //password -> password_hash
     $password_hash = password_hash($password1,PASSWORD_DEFAULT);
@@ -66,13 +72,13 @@ if(isset($_POST['email']))
     if((strlen($city)<2) || (strlen($city)>20))
     {
         $success=false;
-        $_SESSION['e_city']='City must have 2-20 chars';
+        $_SESSION['formErrors']['city'][] = 'City must have 2-20 chars';
     }
     //TEST 2: check city is alphanumeric (not include special chars etc.)
     if(ctype_alnum($city)==false)
     {
         $success=false;
-        $_SESSION['e_city']='City must have only letters';
+        $_SESSION['formErrors']['city'][] = 'City must have only letters';
     }
     
     $config = require_once 'key.php';
@@ -83,7 +89,7 @@ if(isset($_POST['email']))
     if($response->success==false)
     {
         $success=false;
-        $_SESSION['e_captcha']='Are you bot?';
+        $_SESSION['formErrors']['captcha'][] = 'Are you bot?';
     }
     
     //check discount code
@@ -94,13 +100,13 @@ if(isset($_POST['email']))
         if((strlen($discount)<3) || (strlen($discount)>15))
         {
             $success=false;
-            $_SESSION['e_discount']='Incorrect code';
+            $_SESSION['formErrors']['discount'][] = 'Incorrect code';
         }
-        //TEST 2: check login is alphanumeric (not include special chars etc.)
+        //TEST 2: check discount is alphanumeric (not include special chars etc.)
         if(ctype_alnum($discount)==false)
         {
             $success=false;
-            $_SESSION['e_discount']='Incorrect code';
+            $_SESSION['formErrors']['discount'][] = 'Incorrect code';
         }
         //TEST 3: check code's value
         //connect database 
@@ -147,7 +153,7 @@ if(isset($_POST['email']))
     if(!isset($_POST['checkbox']))
     {
         $success=false;
-        $_SESSION['e_checkbox']='You must accept the Terms';
+        $_SESSION['formErrors']['checkbox'][] = 'You must accept the Terms';
     }
     
     
@@ -168,7 +174,7 @@ if(isset($_POST['email']))
             if($noEmail['total']>0) //the email exists in database
             {
                 $success=false;
-                $_SESSION['e_email']='e-mail exists';
+                $_SESSION['formErrors']['email'][] = 'e-mail exists';
             }
             
             //does the login exist?
@@ -182,7 +188,7 @@ if(isset($_POST['email']))
             if($noLogin['total']>0) //the login exists in database
             {
                 $success=false;
-                $_SESSION['e_login']='login exists';
+                $_SESSION['formErrors']['login'][] = 'login exists';
             }
             
             
@@ -210,66 +216,76 @@ if(isset($_POST['email']))
        
        Login: </br> <input type="text" name="login" /></br>
        <?php
-        if(isset($_SESSION['e_login']))
-        {
-            echo $_SESSION['e_login'];
-            unset($_SESSION['e_login']);
+
+    //if (isset($_SESSION['formErrors']['login'])) { echo $_SESSION['formErrors']['login'];}
+        if (isset($_SESSION['formErrors']['login'])&& count($_SESSION['formErrors']['login']) > 0)
+        { foreach ($_SESSION['formErrors']['login'] as $message) 
+           { echo $message; 
+           unset($_SESSION['formErrors']['login']);
+           }
         }
+
        ?>
        </br>
        E-mail: </br> <input type="text" name="email" /></br>
        <?php
-        if(isset($_SESSION['e_email']))
-        {
-            echo $_SESSION['e_email'];
-            unset($_SESSION['e_email']);
+        if (isset($_SESSION['formErrors']['email'])&& count($_SESSION['formErrors']['email']) > 0) 
+        { foreach ($_SESSION['formErrors']['email'] as $message) 
+            { echo $message; 
+            unset($_SESSION['formErrors']['email']);
+            }
         }
        ?>
        </br>
        Password: </br> <input type="password" name="password1" /></br>
        Password: </br> <input type="password" name="password2" /></br></br>
        <?php
-        if(isset($_SESSION['e_password']))
-        {
-            echo $_SESSION['e_password'];
-            unset($_SESSION['e_password']);
+        if (isset($_SESSION['formErrors']['password'])&& count($_SESSION['formErrors']['password']) > 0) 
+        { foreach ($_SESSION['formErrors']['password'] as $message) 
+            { echo $message; 
+            unset($_SESSION['formErrors']['password']);
+            }
         }
        ?>
        </br>
        City:</br> <input type="text" name="city" /></br>
         <?php
-        if(isset($_SESSION['e_city']))
-        {
-            echo $_SESSION['e_city'];
-            unset($_SESSION['e_city']);
+        if (isset($_SESSION['formErrors']['city'])&& count($_SESSION['formErrors']['city']) > 0) 
+        { foreach ($_SESSION['formErrors']['city'] as $message) 
+            { echo $message; 
+            unset($_SESSION['formErrors']['city']);
+            }
         }
        ?>
        </br>
        <div class="g-recaptcha" data-sitekey="6LcvXngUAAAAAFskclqG9NWKdkHU67YK5JP6M_7h"></div></br>
        <?php
-        if(isset($_SESSION['e_captcha']))
-        {
-            echo $_SESSION['e_captcha'];
-            unset($_SESSION['e_captcha']);
+        if (isset($_SESSION['formErrors']['key'])&& count($_SESSION['formErrors']['key']) > 0) 
+        { foreach ($_SESSION['formErrors']['key'] as $message) 
+            { echo $message; 
+            unset($_SESSION['formErrors']['key']);
+            }
         }
        ?>
        </br>
         Have you got a discount code? </br> <input type="text" name="discount" /></br>
         <?php
-        if(isset($_SESSION['e_discount']))
-        {
-            echo $_SESSION['e_discount'];
-            unset($_SESSION['e_discount']);
+        if (isset($_SESSION['formErrors']['discount'])&& count($_SESSION['formErrors']['discount']) > 0) 
+        { foreach ($_SESSION['formErrors']['discount'] as $message) 
+            { echo $message; 
+            unset($_SESSION['formErrors']['discount']);
+            }
         }
        ?>
        </br>
        
        <label><input type="checkbox" name="checkbox" /> I agree to Terms</label></br></br>
        <?php
-        if(isset($_SESSION['e_checkbox']))
-        {
-            echo $_SESSION['e_checkbox'];
-            unset($_SESSION['e_checkbox']);
+        if (isset($_SESSION['formErrors']['checkbox'])&& count($_SESSION['formErrors']['checkbox']) > 0) 
+        { foreach ($_SESSION['formErrors']['checkbox'] as $message) 
+            { echo $message; 
+            unset($_SESSION['formErrors']['checkbox']);
+            }
         }
        ?>
        </br>
